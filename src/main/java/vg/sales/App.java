@@ -61,7 +61,7 @@ public class App extends AbstractJavaFxApplicationSupport {
 
                     try {
                         CSVReader reader = new CSVReader(11);
-                        reader.readAndSaveToDB(filePath, true, 500);
+                        reader.read(filePath, true);
                     } catch (IOException ex) {
                         Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                     }
