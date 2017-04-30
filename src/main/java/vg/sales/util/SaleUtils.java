@@ -1,5 +1,6 @@
 package vg.sales.util;
 
+import java.util.List;
 import vg.sales.exception.MergeToCSVException;
 import vg.sales.model.VGSale;
 
@@ -9,7 +10,7 @@ import vg.sales.model.VGSale;
  */
 public class SaleUtils {
 
-    public static String mergeToCSV(VGSale sale) throws MergeToCSVException {
+    public static String mergeValuesToCSV(VGSale sale) throws MergeToCSVException {
 
         StringBuilder builder = new StringBuilder();
 
@@ -31,5 +32,19 @@ public class SaleUtils {
         
         return builder.toString();
     }
-
+    
+    public static String mergeHeadersToCSV(List<String> headers) {
+        
+        StringBuilder builder = new StringBuilder();
+        
+        headers.forEach((header) -> {
+            builder.append(header).append(",");
+        });
+                
+        String resultWithLastComma = builder.toString();
+        
+        // remove last comma
+        return resultWithLastComma.substring(0, resultWithLastComma.length() - 1);
+    }
+    
 }

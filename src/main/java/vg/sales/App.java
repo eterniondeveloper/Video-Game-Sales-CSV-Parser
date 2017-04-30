@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Lazy;
 import vg.sales.gui.AbstractJavaFxApplicationSupport;
+import vg.sales.model.CSVSheet;
 import vg.sales.reader.CSVReader;
+import vg.sales.writer.WriteToFile;
 
 @Lazy
 @SpringBootApplication
@@ -60,8 +62,10 @@ public class App extends AbstractJavaFxApplicationSupport {
                     filePath = file.getAbsolutePath();
 
                     try {
-                        CSVReader reader = new CSVReader(11);
-                        reader.read(filePath, true);
+                        CSVReader reader = new CSVReader();
+                        CSVSheet sheet = reader.read(filePath, true);
+                        WriteToFile writer = new WriteToFile();
+                        writer.write(filePath, sheet);
                     } catch (IOException ex) {
                         Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                     }

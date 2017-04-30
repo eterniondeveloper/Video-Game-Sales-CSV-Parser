@@ -7,10 +7,13 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import vg.sales.exception.MergeToCSVException;
+import vg.sales.model.CSVSheet;
 import vg.sales.model.VGSale;
 import vg.sales.util.SaleUtils;
 
@@ -20,22 +23,28 @@ import vg.sales.util.SaleUtils;
  */
 public class WriteToFile {
 
-    public void write(String file, List<VGSale> sales) {
+    public void write(final String filename, CSVSheet sheet) {
 
         BufferedWriter bw = null;
         PrintWriter pw = null;
 
         try {
-            File fileDir = new File(file);
+            String outputFilename = createOutputFilename(filename);
+            File fileDir = new File(outputFilename);
             
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir), StandardCharsets.UTF_8));
-
-            for (VGSale sale : sales) {
+            
+            // apply headers
+            if (!sheet.getHeaders().isEmpty()) {
+                bw.append(SaleUtils.mergeHeadersToCSV(sheet.getHeaders()) + "\n");
+            }
+            
+            for (VGSale sale : sheet.getValues()) {
 
                 String value = null;
 
                 try {
-                    value = SaleUtils.mergeToCSV(sale);
+                    value = SaleUtils.mergeValuesToCSV(sale);
                 } catch (MergeToCSVException ex) {
                     Logger.getLogger(WriteToFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -44,7 +53,11 @@ public class WriteToFile {
                     bw.append(value + "\n");
                 }
             }
-
+            
+            sheet.getValues().stream()
+                    .filter(value -> value instanceof VGSale)
+                    .map(value -> (VGSale) value).collect(Collectors.toList());
+            
             bw.flush();
 
         } catch (IOException ex) {
@@ -65,5 +78,15 @@ public class WriteToFile {
         }
 
     }
-
+    
+    private String createOutputFilename(final String filename) {
+                
+        Path oldPath = Paths.get(filename);
+        String oldFilename = oldPath.getFileName().toString();
+        String[] fileChunks = oldFilename.split("\\.");
+        String newPathAsString = oldPath.getParent().toString() + "\\" + fileChunks[0] + "_new.csv";
+        
+        return newPathAsString;
+    }
+       
 }

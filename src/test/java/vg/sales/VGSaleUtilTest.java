@@ -1,5 +1,8 @@
 package vg.sales;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import vg.sales.exception.MergeToCSVException;
@@ -14,7 +17,7 @@ public class VGSaleUtilTest {
     
     @Ignore
     @Test
-    public void testMergeToCSV() throws MergeToCSVException {
+    public void testMergeValuesToCSV() throws MergeToCSVException {
         
         VGSale sale = new VGSale();        
         
@@ -30,8 +33,17 @@ public class VGSaleUtilTest {
         sale.setOtherSales(8.46);
         sale.setGlobalSales(82.74);
         
-        String value = SaleUtils.mergeToCSV(sale);
+        String value = SaleUtils.mergeValuesToCSV(sale);
         System.out.println(value);        
+    }
+    
+    @Test
+    public void testMergeHeadersToCSV() {
+        
+        List<String> headers = Arrays.asList("A", "B", "C");
+        
+        String result = SaleUtils.mergeHeadersToCSV(headers);
+        System.out.println(result);        
     }
     
 }
