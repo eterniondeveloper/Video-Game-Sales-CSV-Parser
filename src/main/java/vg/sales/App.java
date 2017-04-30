@@ -2,7 +2,6 @@ package vg.sales;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Preloader;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Lazy;
 import vg.sales.gui.AbstractJavaFxApplicationSupport;
-import vg.sales.model.VGSale;
 import vg.sales.reader.CSVReader;
 
 @Lazy
@@ -62,8 +60,8 @@ public class App extends AbstractJavaFxApplicationSupport {
                     filePath = file.getAbsolutePath();
 
                     try {
-                        List<VGSale> vgSaleList = new CSVReader().read(filePath, true);
-                        vgSaleList.forEach(System.out::println);
+                        CSVReader reader = new CSVReader(11);
+                        reader.readAndSaveToDB(filePath, true, 500);
                     } catch (IOException ex) {
                         Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
                     }

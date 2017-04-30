@@ -12,6 +12,6 @@ public interface VGSaleDao {
     
     boolean add(VGSale sale) throws DataAccessException;
     
-    List<VGSale> getAllVGSales() throws DataAccessException;
+    boolean add(List<VGSale> sales) throws DataAccessException;
     
 }

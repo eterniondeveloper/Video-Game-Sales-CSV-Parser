@@ -23,8 +23,8 @@ public class VGSaleService {
         return vgSaleDao.add(sale);
     }
     
-    public List<VGSale> getAllVGSales() throws DataAccessException {
-        return vgSaleDao.getAllVGSales();
+    public boolean addVGsales(List<VGSale> sales) throws DataAccessException {
+        return vgSaleDao.add(sales);
     }
-    
+       
 }
