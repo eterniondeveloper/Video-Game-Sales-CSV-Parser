@@ -12,18 +12,19 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import vg.sales.exception.MergeToCSVException;
+import vg.sales.exception.MergeException;
 import vg.sales.model.CSVSheet;
+import vg.sales.model.CSVSheetValue;
 import vg.sales.model.VGSale;
-import vg.sales.util.SaleUtils;
 
 /**
  *
  * @author Konstantinos Raptis
+ * @param <T>
  */
-public class WriteToFile {
+public class WriteToFile<T extends CSVSheetValue> {
 
-    public void write(final String filename, CSVSheet sheet) {
+    public void write(final String filename, CSVSheet<T> sheet) {
 
         BufferedWriter bw = null;
         PrintWriter pw = null;
@@ -36,16 +37,16 @@ public class WriteToFile {
             
             // apply headers
             if (!sheet.getHeaders().isEmpty()) {
-                bw.append(SaleUtils.mergeHeadersToCSV(sheet.getHeaders()) + "\n");
+                bw.append(sheet.mergeHeaders() + "\n");
             }
             
-            for (VGSale sale : sheet.getValues()) {
+            for (T sale : sheet.getValues()) {
 
                 String value = null;
 
                 try {
-                    value = SaleUtils.mergeValuesToCSV(sale);
-                } catch (MergeToCSVException ex) {
+                    value = sale.mergeValue();
+                } catch (MergeException ex) {
                     Logger.getLogger(WriteToFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
 

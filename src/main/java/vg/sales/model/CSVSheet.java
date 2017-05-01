@@ -6,11 +6,12 @@ import java.util.List;
 /**
  *
  * @author Konstantinos Raptis
+ * @param <T> Generic Type 
  */
-public class CSVSheet {
+public class CSVSheet<T extends CSVSheetValue> {
     
     private final List<String> headers;
-    private final List<VGSale> values; 
+    private final List<T> values; 
     
     public CSVSheet() {
         this.headers = new ArrayList<>();
@@ -18,19 +19,32 @@ public class CSVSheet {
     }
     
     public List<String> getHeaders() {
-        return headers;
+        return this.headers;
     }
 
     public void addHeader(String header) {
         this.headers.add(header);
     }
 
-    public List<VGSale> getValues() {
-        return values;
+    public List<T> getValues() {
+        return this.values;
     }
 
-    public void addValue(VGSale value) {
+    public void addValue(T value) {
         this.values.add(value);
+    }
+
+    public String mergeHeaders() {
+        StringBuilder builder = new StringBuilder();
+        
+        this.headers.forEach((header) -> {
+            builder.append(header).append(",");
+        });
+                
+        String resultWithLastComma = builder.toString();
+        
+        // remove last comma
+        return resultWithLastComma.substring(0, resultWithLastComma.length() - 1);
     }
     
 }

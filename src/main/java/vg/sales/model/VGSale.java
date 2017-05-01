@@ -1,11 +1,16 @@
 package vg.sales.model;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import vg.sales.exception.MergeException;
+import vg.sales.reader.CSVReader;
+
 /**
  *
  * @author konstantinos
  */
-public class VGSale {
-    
+public class VGSale implements CSVSheetValue {
+
     private long rank;
     private String name;
     private String platform;
@@ -113,5 +118,76 @@ public class VGSale {
     public String toString() {
         return "VGSale{" + "rank=" + rank + ", name=" + name + ", platform=" + platform + ", year=" + year + ", genre=" + genre + ", publisher=" + publisher + ", naSales=" + naSales + ", euSales=" + euSales + ", jpSales=" + jpSales + ", otherSales=" + otherSales + ", globalSales=" + globalSales + '}';
     }
-    
+
+    @Override
+    public String mergeValue() throws MergeException {
+        StringBuilder builder = new StringBuilder();
+
+        try {
+            builder.append(rank).append(",");
+            builder.append("\"").append(name).append("\"").append(",");
+            builder.append("\"").append(platform).append("\"").append(",");
+            builder.append(year).append(",");
+            builder.append("\"").append(genre).append("\"").append(",");
+            builder.append("\"").append(publisher).append("\"").append(",");
+            builder.append(naSales).append(",");
+            builder.append(euSales).append(",");
+            builder.append(jpSales).append(",");
+            builder.append(otherSales).append(",");
+            builder.append(globalSales);
+        } catch (Exception ex) {
+            throw new MergeException("Merge to CSV exception for " + this.toString(), ex);
+        }
+
+        return builder.toString();
+    }
+
+    @Override
+    public void extractValue(String[] data) {
+        
+        // extract sales data
+        rank = Long.parseLong(data[0]);
+        name = data[1];
+        platform = data[2];
+        
+        try {
+            year = Integer.parseInt(data[3]);
+        } catch (NumberFormatException ex) {
+            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
+        
+        genre = data[4];
+        publisher = data[5];
+        
+        try {
+            naSales = Double.parseDouble(data[6]);
+        } catch (NumberFormatException ex) {
+            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
+
+        try {
+            euSales = Double.parseDouble(data[7]);
+        } catch (NumberFormatException ex) {
+            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
+
+        try {
+            jpSales = Double.parseDouble(data[8]);
+        } catch (NumberFormatException ex) {
+            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
+
+        try {
+            otherSales = Double.parseDouble(data[9]);
+        } catch (NumberFormatException ex) {
+            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
+
+        try {
+            globalSales = Double.parseDouble(data[10]);
+        } catch (NumberFormatException ex) {
+            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+        }
+    }
+
 }
