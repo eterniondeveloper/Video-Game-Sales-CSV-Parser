@@ -12,8 +12,10 @@ public class CSVSheet<T extends CSVSheetValue> {
     
     private final List<String> headers;
     private final List<T> values; 
+    private final boolean isFirstLineHeaders;
     
-    public CSVSheet() {
+    public CSVSheet(boolean isFirstLineHeaders) {
+        this.isFirstLineHeaders = isFirstLineHeaders;
         this.headers = new ArrayList<>();
         this.values = new ArrayList<>();
     }
@@ -33,7 +35,7 @@ public class CSVSheet<T extends CSVSheetValue> {
     public void addValue(T value) {
         this.values.add(value);
     }
-
+    
     public String mergeHeaders() {
         StringBuilder builder = new StringBuilder();
         
@@ -45,6 +47,10 @@ public class CSVSheet<T extends CSVSheetValue> {
         
         // remove last comma
         return resultWithLastComma.substring(0, resultWithLastComma.length() - 1);
+    }
+
+    public boolean isIsFirstLineHeaders() {
+        return isFirstLineHeaders;
     }
     
 }

@@ -21,10 +21,10 @@ public class WriteToFileTest {
         String readFile = "C:\\Users\\konstantinos\\Google Drive\\Πανεπιστήμιο Πειραιώς\\6ο εξάμηνο\\Αποθήκες και εξόρυξη δεδομένων\\Project\\assets\\videogamesales\\vgsales_small.csv";
         String writeFile = "C:\\Users\\konstantinos\\Desktop\\test\\vgsales_new.csv";
         
-        CSVReader<VGSale> reader = new CSVReader<>();
-        CSVSheet<VGSale> sheet = reader.read(readFile, true);
+        CSVReader reader = new CSVReader();
+        CSVSheet<VGSale> sheet = reader.read(readFile, true, VGSale.class);
         
-        WriteToFile<VGSale> writeToFile = new WriteToFile<>();
+        WriteToFile writeToFile = new WriteToFile();
         writeToFile.write(writeFile, sheet);
         
     }

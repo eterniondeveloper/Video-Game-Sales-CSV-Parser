@@ -4,49 +4,48 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import vg.sales.model.CSVFactory;
 import vg.sales.model.CSVSheet;
 import vg.sales.model.CSVSheetValue;
-import vg.sales.model.VGSale;
 
 /**
  *
  * @author konstantinos
- * @param <T>
  */
-public class CSVReader<T extends CSVSheetValue> {
+public class CSVReader {
 
 //    @Autowired
 //    private VGSaleService service;
-    public CSVSheet read(String file, boolean isFirstLineHeaders) throws IOException {
-
-        CSVSheet<T> sheet = new CSVSheet<>();
-
+    public <T extends CSVSheetValue> CSVSheet read(String file, boolean isFirstLineHeaders, Class<? extends CSVSheetValue> cls) throws IOException {
+        
+        CSVFactory factory = new CSVFactory();
+        CSVSheet<T> sheet = new CSVSheet<>(isFirstLineHeaders);
         String line;
         String cvsSplitBy = ",";
 
         BufferedReader br = new BufferedReader(new FileReader(file));
-        T value;
         String[] data;
-        boolean flag = false;
+        boolean columnsFlag = false;
+        boolean headersFlag = false;
         int numberOfColumns = 0;
 
         while ((line = br.readLine()) != null) {
 
             // use comma as separator
             data = line.split(cvsSplitBy);
-            value = (T) new VGSale();
+            T value = factory.create(cls);
 
             // init number of columns
-            if (!flag) {
+            if (!columnsFlag) {
                 numberOfColumns = data.length;
-                flag = true;
+                columnsFlag = true;
             }
 
-            if (isFirstLineHeaders) {
+            if (sheet.isIsFirstLineHeaders() && !headersFlag) {
                 // add headers to sheet here
                 Arrays.asList(data).forEach(header -> sheet.addHeader(header));
 
-                isFirstLineHeaders = false;
+                headersFlag = true;
                 continue;
             }
 
@@ -57,7 +56,7 @@ public class CSVReader<T extends CSVSheetValue> {
 
             value.extractValue(data);
             
-            sheet.addValue((T) value);
+            sheet.addValue(value);
             System.out.println(value);
         }
 

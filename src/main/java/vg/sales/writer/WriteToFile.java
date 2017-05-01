@@ -11,20 +11,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import vg.sales.exception.MergeException;
 import vg.sales.model.CSVSheet;
 import vg.sales.model.CSVSheetValue;
-import vg.sales.model.VGSale;
 
 /**
  *
  * @author Konstantinos Raptis
- * @param <T>
  */
-public class WriteToFile<T extends CSVSheetValue> {
+public class WriteToFile {
 
-    public void write(final String filename, CSVSheet<T> sheet) {
+    public <T extends CSVSheetValue> void write(final String filename, CSVSheet<T> sheet) {
 
         BufferedWriter bw = null;
         PrintWriter pw = null;
@@ -40,24 +37,20 @@ public class WriteToFile<T extends CSVSheetValue> {
                 bw.append(sheet.mergeHeaders() + "\n");
             }
             
-            for (T sale : sheet.getValues()) {
+            for (T value : sheet.getValues()) {
 
-                String value = null;
+                String margedValue = null;
 
                 try {
-                    value = sale.mergeValue();
+                    margedValue = value.mergeValue();
                 } catch (MergeException ex) {
                     Logger.getLogger(WriteToFile.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
-                if (value != null) {
-                    bw.append(value + "\n");
+                if (margedValue != null) {
+                    bw.append(margedValue + "\n");
                 }
             }
-            
-            sheet.getValues().stream()
-                    .filter(value -> value instanceof VGSale)
-                    .map(value -> (VGSale) value).collect(Collectors.toList());
             
             bw.flush();
 
