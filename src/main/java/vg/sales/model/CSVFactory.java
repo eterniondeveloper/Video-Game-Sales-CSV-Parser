@@ -6,10 +6,10 @@ package vg.sales.model;
  */
 public class CSVFactory {
     
-    public <T extends CSVSheetValue> T create(Class<? extends CSVSheetValue> cls) {
+    public CSVSheetValue create(Class<? extends CSVSheetValue> cls) {
         
         if (cls == VGSale.class) {
-            return (T) new VGSale();
+            return new VGSale();
         } 
             
         return null;

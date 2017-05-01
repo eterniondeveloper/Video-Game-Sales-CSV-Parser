@@ -21,7 +21,7 @@ import vg.sales.model.CSVSheetValue;
  */
 public class WriteToFile {
 
-    public <T extends CSVSheetValue> void write(final String filename, CSVSheet<T> sheet) {
+    public void write(final String filename, CSVSheet sheet) {
 
         BufferedWriter bw = null;
         PrintWriter pw = null;
@@ -29,15 +29,15 @@ public class WriteToFile {
         try {
             String outputFilename = createOutputFilename(filename);
             File fileDir = new File(outputFilename);
-            
+
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir), StandardCharsets.UTF_8));
-            
+
             // apply headers
             if (!sheet.getHeaders().isEmpty()) {
                 bw.append(sheet.mergeHeaders() + "\n");
             }
-            
-            for (T value : sheet.getValues()) {
+
+            for (CSVSheetValue value : sheet.getValues()) {
 
                 String margedValue = null;
 
@@ -51,7 +51,7 @@ public class WriteToFile {
                     bw.append(margedValue + "\n");
                 }
             }
-            
+
             bw.flush();
 
         } catch (IOException ex) {
@@ -72,15 +72,15 @@ public class WriteToFile {
         }
 
     }
-    
+
     private String createOutputFilename(final String filename) {
-                
+
         Path oldPath = Paths.get(filename);
         String oldFilename = oldPath.getFileName().toString();
         String[] fileChunks = oldFilename.split("\\.");
         String newPathAsString = oldPath.getParent().toString() + "\\" + fileChunks[0] + "_new.csv";
-        
+
         return newPathAsString;
     }
-       
+
 }

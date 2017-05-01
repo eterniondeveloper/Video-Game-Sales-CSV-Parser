@@ -22,11 +22,10 @@ public class WriteToFileTest {
         String writeFile = "C:\\Users\\konstantinos\\Desktop\\test\\vgsales_new.csv";
         
         CSVReader reader = new CSVReader();
-        CSVSheet<VGSale> sheet = reader.read(readFile, true, VGSale.class);
+        CSVSheet sheet = reader.read(readFile, true, VGSale.class);
         
         WriteToFile writeToFile = new WriteToFile();
         writeToFile.write(writeFile, sheet);
-        
     }
        
 }

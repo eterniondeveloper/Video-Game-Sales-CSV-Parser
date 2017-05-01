@@ -55,10 +55,10 @@ public class App extends AbstractJavaFxApplicationSupport {
             boolean success = false;
 
             if (db.hasFiles()) {
-                
+
                 success = true;
                 String filePath;
-                
+
                 for (File file : db.getFiles()) {
                     filePath = file.getAbsolutePath();
 

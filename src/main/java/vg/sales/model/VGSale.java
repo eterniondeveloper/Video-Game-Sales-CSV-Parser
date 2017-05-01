@@ -116,7 +116,18 @@ public class VGSale implements CSVSheetValue {
 
     @Override
     public String toString() {
-        return "VGSale{" + "rank=" + rank + ", name=" + name + ", platform=" + platform + ", year=" + year + ", genre=" + genre + ", publisher=" + publisher + ", naSales=" + naSales + ", euSales=" + euSales + ", jpSales=" + jpSales + ", otherSales=" + otherSales + ", globalSales=" + globalSales + '}';
+        return "VGSale{" 
+                + "rank=" + rank 
+                + ", name=" + name 
+                + ", platform=" + platform 
+                + ", year=" + year 
+                + ", genre=" + genre 
+                + ", publisher=" + publisher 
+                + ", naSales=" + naSales 
+                + ", euSales=" + euSales
+                + ", jpSales=" + jpSales 
+                + ", otherSales=" + otherSales 
+                + ", globalSales=" + globalSales + '}';
     }
 
     @Override
@@ -144,21 +155,21 @@ public class VGSale implements CSVSheetValue {
 
     @Override
     public void extractValue(String[] data) {
-        
+
         // extract sales data
         rank = Long.parseLong(data[0]);
         name = data[1];
         platform = data[2];
-        
+
         try {
             year = Integer.parseInt(data[3]);
         } catch (NumberFormatException ex) {
             Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
         }
-        
+
         genre = data[4];
         publisher = data[5];
-        
+
         try {
             naSales = Double.parseDouble(data[6]);
         } catch (NumberFormatException ex) {
