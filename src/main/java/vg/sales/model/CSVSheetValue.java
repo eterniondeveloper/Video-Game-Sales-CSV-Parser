@@ -1,5 +1,6 @@
 package vg.sales.model;
 
+import vg.sales.exception.ExtractException;
 import vg.sales.exception.MergeException;
 
 /**
@@ -10,6 +11,6 @@ public interface CSVSheetValue {
     
     String mergeValue() throws MergeException;
     
-    void extractValue(String[] data);
+    void extractValue(String[] data) throws ExtractException;
     
 }

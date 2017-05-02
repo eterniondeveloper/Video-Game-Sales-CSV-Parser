@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-mainClassName = 'vg.sales.App'
+mainClassName = 'vg.sales.Main'
 
 jar {
     baseName = 'vg-sales'

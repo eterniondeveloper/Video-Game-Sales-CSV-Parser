@@ -1,9 +1,7 @@
 package vg.sales.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import vg.sales.exception.ExtractException;
 import vg.sales.exception.MergeException;
-import vg.sales.reader.CSVReader;
 
 /**
  *
@@ -116,17 +114,17 @@ public class VGSale implements CSVSheetValue {
 
     @Override
     public String toString() {
-        return "VGSale{" 
-                + "rank=" + rank 
-                + ", name=" + name 
-                + ", platform=" + platform 
-                + ", year=" + year 
-                + ", genre=" + genre 
-                + ", publisher=" + publisher 
-                + ", naSales=" + naSales 
+        return "VGSale{"
+                + "rank=" + rank
+                + ", name=" + name
+                + ", platform=" + platform
+                + ", year=" + year
+                + ", genre=" + genre
+                + ", publisher=" + publisher
+                + ", naSales=" + naSales
                 + ", euSales=" + euSales
-                + ", jpSales=" + jpSales 
-                + ", otherSales=" + otherSales 
+                + ", jpSales=" + jpSales
+                + ", otherSales=" + otherSales
                 + ", globalSales=" + globalSales + '}';
     }
 
@@ -154,51 +152,24 @@ public class VGSale implements CSVSheetValue {
     }
 
     @Override
-    public void extractValue(String[] data) {
-
-        // extract sales data
-        rank = Long.parseLong(data[0]);
-        name = data[1];
-        platform = data[2];
+    public void extractValue(String[] data) throws ExtractException {
 
         try {
+            rank = Long.parseLong(data[0]);
+            name = data[1];
+            platform = data[2];
             year = Integer.parseInt(data[3]);
-        } catch (NumberFormatException ex) {
-            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
-        }
-
-        genre = data[4];
-        publisher = data[5];
-
-        try {
+            genre = data[4];
+            publisher = data[5];
             naSales = Double.parseDouble(data[6]);
-        } catch (NumberFormatException ex) {
-            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
-        }
-
-        try {
             euSales = Double.parseDouble(data[7]);
-        } catch (NumberFormatException ex) {
-            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
-        }
-
-        try {
             jpSales = Double.parseDouble(data[8]);
-        } catch (NumberFormatException ex) {
-            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
-        }
-
-        try {
             otherSales = Double.parseDouble(data[9]);
-        } catch (NumberFormatException ex) {
-            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
-        }
-
-        try {
             globalSales = Double.parseDouble(data[10]);
         } catch (NumberFormatException ex) {
-            Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+            throw new ExtractException(ex.getMessage());
         }
+
     }
 
 }

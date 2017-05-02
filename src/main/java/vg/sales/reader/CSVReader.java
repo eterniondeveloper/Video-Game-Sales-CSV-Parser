@@ -1,9 +1,13 @@
 package vg.sales.reader;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import vg.sales.exception.ExtractException;
 import vg.sales.model.CSVFactory;
 import vg.sales.model.CSVSheet;
 import vg.sales.model.CSVSheetValue;
@@ -14,21 +18,23 @@ import vg.sales.model.CSVSheetValue;
  */
 public class CSVReader {
     
-    public CSVSheet read(String filename, boolean isFirstLineHeaders, Class<? extends CSVSheetValue> cls) throws IOException {
+    public CSVSheet read(File file, boolean isFirstLineHeaders, Class<? extends CSVSheetValue> cls) throws IOException {
         
         CSVFactory factory = new CSVFactory();
         CSVSheet sheet = new CSVSheet(isFirstLineHeaders);
         String line;
         String cvsSplitBy = ",";
 
-        BufferedReader br = new BufferedReader(new FileReader(filename));
+        BufferedReader br = new BufferedReader(new FileReader(file));
         String[] data;
         boolean flag = false;
         int numberOfColumns = 0;
         CSVSheetValue value;
         
+        
+        
         while ((line = br.readLine()) != null) {
-
+                       
             // use comma as separator
             data = line.split(cvsSplitBy);
             value = factory.create(cls);
@@ -54,13 +60,17 @@ public class CSVReader {
             if (data.length != numberOfColumns) {
                 continue;
             }
-
-            value.extractValue(data);
             
-            sheet.addValue(value);
-            System.out.println(value);
+            try {
+                value.extractValue(data);
+                sheet.addValue(value);
+                System.out.println(value);
+            } catch (ExtractException ex) {
+                Logger.getLogger(CSVReader.class.getName()).log(Level.SEVERE, ex.getMessage());
+            }
+            
         }
-
+              
         return sheet;
     }
 
