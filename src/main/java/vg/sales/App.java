@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,24 +12,17 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Lazy;
-import vg.sales.gui.AbstractJavaFxApplicationSupport;
 import vg.sales.model.CSVSheet;
 import vg.sales.model.VGSale;
 import vg.sales.reader.CSVReader;
 import vg.sales.writer.WriteToFile;
 
-@Lazy
-@SpringBootApplication
-public class App extends AbstractJavaFxApplicationSupport {
+public class App extends Application {
 
     /**
      * Note that this is configured in application.properties
      */
-    @Value("${app.ui.title:Example App}")
-    private String windowTitle;
+    private final String windowTitle = "Video Game Sales CSV Parser";
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -86,7 +80,7 @@ public class App extends AbstractJavaFxApplicationSupport {
     }
 
     public static void main(String[] args) {
-        launchApp(App.class, args);
+        launch(args);
     }
 
 }
