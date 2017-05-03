@@ -109,7 +109,7 @@ public abstract class JavaFXSupportApplication extends Application {
                         CSVSheet sheet = reader.read(file, true, VGSale.class);
                         WriteToFile writer = new WriteToFile();
                         writer.write(filePath, sheet);
-                    } catch (IOException ex) {
+                    } catch (IOException | InstantiationException | IllegalAccessException ex) {
                         Logger.getLogger(JavaFXSupportApplication.class.getName()).log(Level.SEVERE, null, ex);
                     }
 

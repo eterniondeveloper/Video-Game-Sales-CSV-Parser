@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vg.sales.exception.ExtractException;
-import vg.sales.model.CSVFactory;
 import vg.sales.model.CSVSheet;
 import vg.sales.model.CSVSheetValue;
 
@@ -18,9 +17,8 @@ import vg.sales.model.CSVSheetValue;
  */
 public class CSVReader {
     
-    public CSVSheet read(File file, boolean isFirstLineHeaders, Class<? extends CSVSheetValue> cls) throws IOException {
-        
-        CSVFactory factory = new CSVFactory();
+    public CSVSheet read(File file, boolean isFirstLineHeaders, Class<? extends CSVSheetValue> cls) throws IOException, InstantiationException, IllegalAccessException {
+       
         CSVSheet sheet = new CSVSheet(isFirstLineHeaders);
         String line;
         String cvsSplitBy = ",";
@@ -37,7 +35,7 @@ public class CSVReader {
                        
             // use comma as separator
             data = line.split(cvsSplitBy);
-            value = factory.create(cls);
+            value = cls.newInstance();
             
             // avoid a null value
             if (value == null) {
