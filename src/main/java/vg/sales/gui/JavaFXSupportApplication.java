@@ -8,6 +8,8 @@ import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -32,11 +34,10 @@ public abstract class JavaFXSupportApplication extends Application {
     private static final String TITLE = "Video Game Sales CSV Parser";
     private static final int WIDTH = 550;
     private static final int HEIGHT = WIDTH / 12 * 9;
-    
+
     private final String GREEN_HEX = "86FF82";
     private final String GRAY_HEX = "C0C0C0";
-    
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         notifyPreloader(new Preloader.StateChangeNotification(Preloader.StateChangeNotification.Type.BEFORE_START));
@@ -44,7 +45,7 @@ public abstract class JavaFXSupportApplication extends Application {
         final StackPane layout = new StackPane();
         layout.setBackground(new Background(new BackgroundFill(Paint.valueOf(GRAY_HEX), CornerRadii.EMPTY, Insets.EMPTY)));
         layout.getChildren().add(new Label("Drop CSV File Here"));
-        
+
         Scene scene = new Scene(layout, WIDTH, HEIGHT);
 
         layout.setOnDragOver((DragEvent event) -> {
@@ -62,12 +63,12 @@ public abstract class JavaFXSupportApplication extends Application {
             layout.setBackground(new Background(new BackgroundFill(Paint.valueOf(GREEN_HEX), CornerRadii.EMPTY, Insets.EMPTY)));
             event.consume();
         });
-        
+
         layout.setOnDragExited((DragEvent event) -> {
             layout.setBackground(new Background(new BackgroundFill(Paint.valueOf(GRAY_HEX), CornerRadii.EMPTY, Insets.EMPTY)));
             event.consume();
         });
-        
+
         // Dropping over surface
         layout.setOnDragDropped((DragEvent event) -> {
 
@@ -81,6 +82,27 @@ public abstract class JavaFXSupportApplication extends Application {
 
                 for (File file : db.getFiles()) {
                     filePath = file.getAbsolutePath();
+
+                    // extract file extension
+                    String ext = null;
+                    String filename = file.getName();
+                    int i = filename.lastIndexOf(".");
+
+                    if (i > 0 && i < filename.length() - 1) {
+                        ext = filename.substring(i + 1).toLowerCase();
+                    }
+
+                    // check for a .csv extension
+                    if (ext == null || !ext.equals("csv")) {
+                        Alert alert = new Alert(AlertType.ERROR);
+                        alert.initOwner(primaryStage);
+                        alert.setTitle("Error Dialog");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Not a .csv file");
+                        alert.showAndWait();
+                        
+                        continue;
+                    }
 
                     try {
                         CSVReader reader = new CSVReader();
