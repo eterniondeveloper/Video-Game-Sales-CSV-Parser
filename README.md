@@ -15,7 +15,7 @@ Rank,Name,Ptatform,Year,Genre,Publisher,NA_Sales,JP_Sales,Other_Sales,Global_Sal
 
 1. Just create a new model POJO class in vg.sales.model package and implement CSVSheetValue interface
 
-2. Go to JavaFXSupportApplication,java in gui package and change this line:
+2. Go to JavaFXSupportApplication.java in gui package and change this line:
 
   CSVSheet sheet = reader.read(file, true, VGSale.class);
 
